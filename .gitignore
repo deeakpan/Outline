@@ -42,4 +42,8 @@ next-env.d.ts
 
 # contracts deps
 contracts/node_modules
+
+# local only
 brimdex/
+scratchpad*
+.claude/
