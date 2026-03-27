@@ -12,21 +12,35 @@ export default function FilterSelect({
   onChange: (i: number) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState({ top: 0, left: 0 });
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const dropRef = useRef<HTMLDivElement>(null);
   const active = value !== 0;
 
   useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    function handlePointer(e: PointerEvent) {
+      if (
+        btnRef.current && !btnRef.current.contains(e.target as Node) &&
+        dropRef.current && !dropRef.current.contains(e.target as Node)
+      ) setOpen(false);
     }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("pointerdown", handlePointer);
+    return () => document.removeEventListener("pointerdown", handlePointer);
   }, []);
 
+  function openDropdown() {
+    if (btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 6, left: r.left });
+    }
+    setOpen(o => !o);
+  }
+
   return (
-    <div ref={ref} style={{ position: "relative" }}>
+    <div style={{ position: "relative" }}>
       <button
-        onClick={() => setOpen(o => !o)}
+        ref={btnRef}
+        onClick={openDropdown}
         style={{
           display: "flex",
           alignItems: "center",
@@ -49,18 +63,21 @@ export default function FilterSelect({
       </button>
 
       {open && (
-        <div style={{
-          position: "absolute",
-          top: "calc(100% + 6px)",
-          left: 0,
-          zIndex: 100,
-          background: "var(--bg-panel)",
-          border: "1px solid var(--border)",
-          borderRadius: 10,
-          overflow: "hidden",
-          minWidth: 140,
-          boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
-        }}>
+        <div
+          ref={dropRef}
+          style={{
+            position: "fixed",
+            top: pos.top,
+            left: pos.left,
+            zIndex: 1000,
+            background: "var(--bg-panel)",
+            border: "1px solid var(--border)",
+            borderRadius: 10,
+            overflow: "hidden",
+            minWidth: 140,
+            boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
+          }}
+        >
           {options.map((opt, i) => (
             <button
               key={i}

@@ -23,8 +23,10 @@ export default function AssetSelect({
   onChange: (v: string) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState({ top: 0, left: 0 });
   const [prices, setPrices] = useState<PriceData>({});
-  const ref = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const dropRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ids = ASSETS.map(a => a.id).join(",");
@@ -35,21 +37,32 @@ export default function AssetSelect({
   }, []);
 
   useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    function handlePointer(e: PointerEvent) {
+      if (
+        btnRef.current && !btnRef.current.contains(e.target as Node) &&
+        dropRef.current && !dropRef.current.contains(e.target as Node)
+      ) setOpen(false);
     }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("pointerdown", handlePointer);
+    return () => document.removeEventListener("pointerdown", handlePointer);
   }, []);
+
+  function openDropdown() {
+    if (btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 6, left: r.left });
+    }
+    setOpen(o => !o);
+  }
 
   const active = value !== "All assets";
   const selectedAsset = ASSETS.find(a => a.symbol === value);
 
   return (
-    <div ref={ref} style={{ position: "relative" }}>
-      {/* Trigger */}
+    <div style={{ position: "relative" }}>
       <button
-        onClick={() => setOpen(o => !o)}
+        ref={btnRef}
+        onClick={openDropdown}
         style={{
           display: "flex",
           alignItems: "center",
@@ -74,21 +87,22 @@ export default function AssetSelect({
         </svg>
       </button>
 
-      {/* Dropdown */}
       {open && (
-        <div style={{
-          position: "absolute",
-          top: "calc(100% + 6px)",
-          left: 0,
-          zIndex: 100,
-          background: "var(--bg-panel)",
-          border: "1px solid var(--border)",
-          borderRadius: 12,
-          overflow: "hidden",
-          minWidth: 240,
-          boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
-        }}>
-          {/* All option */}
+        <div
+          ref={dropRef}
+          style={{
+            position: "fixed",
+            top: pos.top,
+            left: pos.left,
+            zIndex: 1000,
+            background: "var(--bg-panel)",
+            border: "1px solid var(--border)",
+            borderRadius: 12,
+            overflow: "hidden",
+            minWidth: 240,
+            boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
+          }}
+        >
           <button
             onClick={() => { onChange("All assets"); setOpen(false); }}
             style={{
