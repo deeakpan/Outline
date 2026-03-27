@@ -206,9 +206,14 @@ export default function TradingPanel({
             </div>
             <div style={{ background: "#252525", border: `1px solid ${amountStr && overBalance ? "#EF4444" : "#3A3A3A"}`, borderRadius: 10, padding: "0.75rem 1rem", display: "flex", alignItems: "center", gap: "0.6rem" }}>
               <input
-                type="number"
+                type="text"
+                inputMode="decimal"
                 value={amountStr}
-                onChange={e => setAmountStr(e.target.value)}
+                onChange={e => {
+                  const raw = e.target.value.replace(/[^0-9.]/g, "");
+                  const parts = raw.split(".");
+                  setAmountStr(parts.length > 2 ? parts[0] + "." + parts.slice(1).join("") : raw);
+                }}
                 placeholder="0.00"
                 style={{ flex: 1, background: "none", border: "none", outline: "none", color: "var(--text-primary)", fontSize: "1.5rem", fontWeight: 700, fontFamily: "var(--font-geist-mono)", width: 0 }}
               />
@@ -288,9 +293,14 @@ export default function TradingPanel({
                 </div>
                 <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
                   <input
-                    type="number" min={0.1} max={50} step={0.1}
+                    type="text"
+                    inputMode="decimal"
                     value={slippageInput}
-                    onChange={e => setSlippageInput(e.target.value)}
+                    onChange={e => {
+                      const raw = e.target.value.replace(/[^0-9.]/g, "");
+                      const parts = raw.split(".");
+                      setSlippageInput(parts.length > 2 ? parts[0] + "." + parts.slice(1).join("") : raw);
+                    }}
                     onKeyDown={e => { if (e.key === "Enter") { const v = Math.min(50, Math.max(0.1, Number(slippageInput))); setSlippage(v); setSlippageOpen(false); }}}
                     style={{ flex: 1, background: "#1A1A1A", border: "1px solid #3A3A3A", borderRadius: 6, padding: "0.3rem 0.5rem", color: "var(--text-primary)", fontSize: "0.78rem", outline: "none", fontFamily: "var(--font-geist-mono)" }}
                   />
