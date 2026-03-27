@@ -19,6 +19,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Outline Markets",
   description: "Range prediction markets with yield on Base",
+  icons: {
+    icon: "/bluelogo.jpg",
+    apple: "/bluelogo.jpg",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
