@@ -20,8 +20,9 @@ export const metadata: Metadata = {
   title: "Outline Markets",
   description: "Range prediction markets with yield on Base",
   icons: {
-    icon: "/bluelogo.jpg",
-    apple: "/bluelogo.jpg",
+    icon: "/logo-trimmed.png",
+    apple: "/logo-trimmed.png",
+    shortcut: "/logo-trimmed.png",
   },
 };
 
