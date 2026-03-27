@@ -1,8 +1,9 @@
 import { getAllMarkets } from "@/lib/contracts";
+import type { MarketData } from "@/lib/contracts";
 import MarketsClient from "./components/MarketsClient";
 
 export default async function MarketsPage() {
-  let markets = [];
+  let markets: MarketData[] = [];
   let error: string | null = null;
   try { markets = await getAllMarkets(); }
   catch { error = "Could not load markets. Check your RPC connection."; }
