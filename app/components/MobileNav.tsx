@@ -35,13 +35,12 @@ const navLinks = [
     ),
   },
   {
-    label: "Portfolio",
-    href: "/portfolio",
+    label: "Docs",
+    href: "/docs",
     icon: (
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round">
-        <rect x="3" y="7" width="18" height="14" rx="2" strokeOpacity="0.3" />
-        <path d="M8 7V5a2 2 0 014 0v2" />
-        <path d="M8 12h8M8 16h5" strokeOpacity="0.6" />
+        <rect x="4" y="3" width="16" height="18" rx="2" strokeOpacity="0.3" />
+        <path d="M8 8h8M8 12h8M8 16h5" strokeOpacity="0.6" />
       </svg>
     ),
   },
