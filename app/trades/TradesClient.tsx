@@ -207,6 +207,9 @@ function PositionRow({
 
 export default function TradesClient({ markets }: { markets: MarketData[] }) {
   const { address, isConnected } = useAccount();
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"ALL" | "LIVE" | "PENDING" | "SETTLED" | "CANCELLED">("ALL");
+  const [sideFilter, setSideFilter] = useState<"ALL" | "BOUND" | "BREAK">("ALL");
 
   const { data: positionsData, isLoading } = useReadContracts({
     contracts: markets.map(m => ({
@@ -242,10 +245,6 @@ export default function TradesClient({ markets }: { markets: MarketData[] }) {
       }
     }
   }
-
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"ALL" | "LIVE" | "PENDING" | "SETTLED" | "CANCELLED">("ALL");
-  const [sideFilter, setSideFilter] = useState<"ALL" | "BOUND" | "BREAK">("ALL");
 
   const filtered = rows.filter(({ market, isBound }) => {
     if (search && !market.asset.toLowerCase().includes(search.toLowerCase())) return false;
