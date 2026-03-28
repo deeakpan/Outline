@@ -2,6 +2,8 @@ import { getAllMarkets } from "@/lib/contracts";
 import type { MarketData } from "@/lib/contracts";
 import MarketsClient from "./components/MarketsClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function MarketsPage() {
   let markets: MarketData[] = [];
   let error: string | null = null;
